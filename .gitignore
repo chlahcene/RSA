@@ -50,3 +50,13 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+bin/*
+doxygen/*
+obj/*
+Test/*
+
+*.cbp
+*.depend
+*.layout
+*.txt
