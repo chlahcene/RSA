@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
 #include <time.h>
+
 #include <math.h>
 int Max(int a,int b){
     if (a<b) return b;
@@ -15,10 +17,23 @@ int Min(int a,int b){
         else return a;
 }
 
+
+char *str_tolower (const char *ct);
+    //mettre un caractère en minuscule
+char *str_toupper (const char *ct);
+    //mettre un caractère en majuscule
 int str_istr (const char *cs, const char *ct);
     //connaître l'index de celle-ci dans le tableau
 char *str_sub (const char *s, unsigned int debut, unsigned int fin);
     //extraire une sous-chaîne de s comprise entre l'indice debut et fin
+char **str_split (char *s, const char *ct);
+    //découper une chaîne de caractère suivant un délimiteur et de placer chaque sous-chaîne dans un tableau terminé par NULL
+char *str_join (char **cs,int Taille);
+    //réunissant des chaînes de caractères grâce à un séparateur
+char *str_remplace (const char *s, unsigned int debut, unsigned int lenght, const char *ct);
+    //remplacer length caractères de la chaîne s à partir de l'indice debut par une nouvelle chaîne ct. Une nouvelle chaîne est créée
+char *str_strip (const char *st);
+    //supprime les espaces superflus dans une chaîne de caractère
 void StrSuppChar(char* text,int pos);
     //on supprime le cractere de la postion pos
 int isCharSpFr(char ch);
@@ -41,6 +56,46 @@ void File_Derectory_Current(char ***Fichier,int *Taille);
     // vous donne le name des fichier qui se trouve dans le dossier current
     // il fait le alloucation alors il dois faire liberation
 
+char *str_tolower (const char *ct){
+    //mettre un caractère en minuscule
+  char *s = NULL;
+
+  if (ct != NULL)
+  {
+    int i;
+
+    s = malloc (sizeof (*s) * (strlen (ct) + 1));
+    if (s != NULL)
+    {
+      for (i = 0; ct[i]; i++)
+      {
+        s[i] = tolower (ct[i]);
+      }
+      s[i] = '\0';
+    }
+  }
+  return s;
+}
+char *str_toupper (const char *ct){
+    //mettre un caractère en majuscule
+  char *s = NULL;
+
+  if (ct != NULL)
+  {
+    int i;
+
+    s = malloc (sizeof (*s) * (strlen (ct) + 1));
+    if (s != NULL)
+    {
+      for (i = 0; ct[i]; i++)
+      {
+        s[i] = toupper (ct[i]);
+      }
+      s[i] = '\0';
+    }
+  }
+  return s;
+}
 int str_istr (const char *cs, const char *ct){
   //connaître l'index de celle-ci dans le tableau
   int index = -1;
@@ -81,6 +136,142 @@ char *str_sub (const char *s, unsigned int debut, unsigned int fin){
     }
   }
   return new_s;
+}
+char **str_split (char *s, const char *ct){
+    //découper une chaîne de caractère suivant un délimiteur et de placer chaque sous-chaîne dans un tableau terminé par NULL
+  char **tab = NULL;
+
+  if (s != NULL && ct != NULL)
+  {
+    int i;
+    char *cs = NULL;
+    size_t sz = 1;
+
+    for (i = 0; (cs = strtok (s, ct)); i++)
+    {
+      if (sz <= i + 1)
+      {
+        void *tmp = NULL;
+
+        sz <<= 1;
+        tmp = realloc (tab, sizeof (*tab) * sz);
+        if (tmp != NULL)
+        {
+          tab = tmp;
+        }
+        else
+        {
+          fprintf (stderr, "Memoire insuffisante\n");
+          free (tab);
+          tab = NULL;
+          exit (EXIT_FAILURE);
+        }
+      }
+      tab[i] = cs;
+      s = NULL;
+    }
+    tab[i] = NULL;
+  }
+  return tab;
+}
+char *str_join (char **cs,int Taille){
+   //réunissant des chaînes de caractères grâce à un séparateur
+  const char *ct;
+  char *s = NULL;
+  size_t sz = 0;
+  int i=0;
+  while (i<Taille)
+  {
+      ct=cs[i++];
+    void *tmp = NULL;
+    sz += strlen (ct) + strlen (cs);
+    tmp = realloc (s, sizeof (*s) * (sz + 1));
+    if (tmp != NULL)
+    {
+      if (s == NULL)
+      {
+        s = tmp;
+        strcpy (s, ct);
+      }
+      else
+      {
+         s = tmp;
+         strcat (s, cs);
+         strcat (s, ct);
+      }
+    }
+    else
+    {
+      fprintf (stderr, "Memoire insuffisante\n");
+      free (s);
+      s = NULL;
+      exit (EXIT_FAILURE);
+    }
+  }
+  return s;
+}
+char *str_remplace (const char *s, unsigned int debut, unsigned int lenght, const char *ct){
+    //remplacer length caractères de la chaîne s à partir de l'indice start par une nouvelle chaîne ct. Une nouvelle chaîne est créée
+  char *new_s = NULL;
+
+  if (s != NULL && ct != NULL && debut >= 0 && lenght > 0)
+  {
+    size_t sz = strlen (s);
+
+    new_s = malloc (sizeof (*new_s) * (sz - lenght + strlen (ct) + 1));
+    if (new_s != NULL)
+    {
+      memcpy (new_s, s, debut);
+      memcpy (&new_s[debut], ct, strlen (ct));
+      memcpy (&new_s[debut + strlen (ct)], &s[debut + lenght], sz - lenght - debut + 1);
+    }
+  }
+  else
+  {
+    fprintf (stderr, "Memoire insuffisante\n");
+    exit (EXIT_FAILURE);
+  }
+  return new_s;
+}
+char *str_strip (const char *st){
+    //supprime les espaces superflus dans une chaîne de caractère
+  char *strip = NULL;
+
+  if (st != NULL)
+  {
+    strip = malloc (sizeof (*strip) * (strlen (st) + 1));
+    if (strip != NULL)
+    {
+      int i, j;
+      int ps = 0;
+
+      for (i = 0, j = 0; st[i]; i++)
+      {
+        if (st[i] == ' ')
+        {
+          if (ps == 0)
+          {
+            strip[j] = st[i];
+            ps = 1;
+            j++;
+          }
+        }
+        else
+        {
+          strip[j] = st[i];
+          ps = 0;
+          j++;
+        }
+      }
+      strip[j] = '\0';
+    }
+    else
+    {
+      fprintf (stderr, "Memoire insuffisante\n");
+      exit (EXIT_FAILURE);
+    }
+  }
+  return strip;
 }
 void StrSuppChar(char* text,int pos){
     /** on supprime le cractere de la postion pos
@@ -163,44 +354,41 @@ char** Texte_split (const char *s, const char *ct,int NumberMax){
 char** tab = NULL;
   int taille=strlen(s);
   int T1=taille/NumberMax+2;
-  tab = malloc((T1)*(sizeof(char*)));
-   if (tab!=NULL){
-      tab[0]=NULL;
-      if (s != NULL && ct != NULL)
-      {
-        int i=0,j;
-        int M=NumberMax-1,M1=0;
-        while (M<taille){
-            j=str_istr(s+M1,"\n");
-            if (j>-1 && (j+M1)<=M){
-                if (i>=T1) tab=realloc(tab,(i+1)*(sizeof(s)));
-                tab[i]=str_sub(s,M1,M1+j-1);
-                if (tab[i]!=NULL) i++;
-                M1+=j+1;
-                M=M1+NumberMax-1;
-            }else{
-                while(strchr(ct,s[M])==NULL && M>0) M--;
-                if (i>=T1) tab=realloc(tab,(i+1)*(sizeof(s)));
-                tab[i]=str_sub(s,M1,M);
-                if (tab[i]!=NULL) i++;
-                M1=M+1;
-                M=M1+NumberMax-1;
-                }
+  tab = (char**)malloc((T1)*(sizeof(s)));
+    tab[0]=NULL;
+  if (s != NULL && ct != NULL)
+  {
+    int i=0,j;
+    int M=NumberMax-1,M1=0;
+    while (M<taille){
+        j=str_istr(s+M1,"\n");
+        if (j>-1 && (j+M1)<=M){
+            if (i>=T1) tab=realloc(tab,(i+1)*(sizeof(s)));
+            tab[i]=str_sub(s,M1,M1+j-1);
+            if (tab[i]!=NULL) i++;
+            M1+=j+1;
+            M=M1+NumberMax-1;
+        }else{
+            while(strchr(ct,s[M])==NULL && M>0) M--;
+            if (i>=T1) tab=realloc(tab,(i+1)*(sizeof(s)));
+            tab[i]=str_sub(s,M1,M);
+            if (tab[i]!=NULL) i++;
+            M1=M+1;
+            M=M1+NumberMax-1;
             }
-            while((j=str_istr(s+M1,"\n"))>-1 && M1<taille){
-                if (i>=T1) tab=realloc(tab,(i+1)*(sizeof(s)));
-                tab[i]=str_sub(s,M1,M1+j-1);
-                if (tab[i]!=NULL) i++;
-                M1+=j+1;
-            }
-                if (i>=T1) tab=realloc(tab,(i+2)*(sizeof(s)));
-                tab[i]=str_sub(s,M1,taille-1);
-                if (tab[i]!=NULL) i++;
-                tab[i]=NULL;
-            }
-
-   }else fprintf(stderr,"erreur de malloc");
-    return tab;
+        }
+        while((j=str_istr(s+M1,"\n"))>-1 && M1<taille){
+            if (i>=T1) tab=realloc(tab,(i+1)*(sizeof(s)));
+            tab[i]=str_sub(s,M1,M1+j-1);
+            if (tab[i]!=NULL) i++;
+            M1+=j+1;
+        }
+            if (i>=T1) tab=realloc(tab,(i+2)*(sizeof(s)));
+            tab[i]=str_sub(s,M1,taille-1);
+            if (tab[i]!=NULL) i++;
+            tab[i]=NULL;
+        }
+  return tab;
 }
 int *IndexFileTexte(const char *NomFichier,const char *deliminateur,int MaxLine,int *NMot){
 
@@ -237,18 +425,15 @@ void cputsxyAreaBlanc(int x,int y,const char* chain,int max_Nbr_line,int max_len
      **/
 
      int i;
-     char** tmp=NULL;
-     if ((tmp=Texte_split(chain,deliminateur,max_length_line))!=NULL){
-         for (i=0;i<max_Nbr_line && tmp[i]!=NULL ;i++) cputsxyBlanc(x,y+i,tmp[i],max_length_line);
-         for (;i<max_Nbr_line;i++) cputsxyBlanc(x,y+i," ",max_length_line);
-         i=0;
-         while(tmp[i]!=NULL){
-            free(tmp[i++]);
-         }
-         free(tmp);
-         tmp=NULL;
+     char** tmp;
+     tmp=Texte_split(chain,deliminateur,max_length_line);
+     for (i=0;i<max_Nbr_line && tmp[i]!=NULL ;i++) cputsxyBlanc(x,y+i,tmp[i],max_length_line);
+     for (;i<max_Nbr_line;i++) cputsxyBlanc(x,y+i," ",max_length_line);
+     i=0;
+     while(tmp[i]!=NULL){
+        free(tmp[i++]);
      }
-
+     //free(tmp);
 }
 void cputsxyBlancArea(int x,int y,const char* chain,int max_length_line,const char *deliminateur){
 
@@ -257,16 +442,13 @@ void cputsxyBlancArea(int x,int y,const char* chain,int max_length_line,const ch
      **/
 
      int i;
-     char** tmp=NULL;
-     if (tmp=Texte_split(chain,deliminateur,max_length_line)!=NULL){
-        for (i=0;tmp[i]!=NULL ;i++) {
+     char** tmp;
+     tmp=Texte_split(chain,deliminateur,max_length_line);
+     for (i=0;tmp[i]!=NULL ;i++) {
         cputsxyBlanc(x,y+i,tmp[i],max_length_line);
         free(tmp[i]);
-        }
-        free(tmp);
-        tmp=NULL;
      }
-
+     free(tmp);
 }
 void cputsxyArea(int x,int y,const char* chain,int max_length_line,const char *deliminateur){
 
@@ -276,14 +458,12 @@ void cputsxyArea(int x,int y,const char* chain,int max_length_line,const char *d
 
      int i;
      char** tmp=NULL;
-     if (tmp=Texte_split(chain,deliminateur,max_length_line)!=NULL){
-         for (i=0;tmp[i]!=NULL ;i++) {
-            cputsxy(x,y+i,tmp[i]);
-            free(tmp[i]);
-         }
-         free(tmp);
-         tmp=NULL;
+     tmp=Texte_split(chain,deliminateur,max_length_line);
+     for (i=0;tmp[i]!=NULL ;i++) {
+        cputsxy(x,y+i,tmp[i]);
+        free(tmp[i]);
      }
+     if (tmp!=NULL) free(tmp);
 }
 void Time_ecoule(time_t temp,char* Time_ecl){
     time_t time_acuteul;

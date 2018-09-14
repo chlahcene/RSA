@@ -2,7 +2,7 @@
  *
  * Written by:
  * Hongli Lai <hongli@telekabel.nl>
- * tkorrovi <tkorrovi@altavista.net> on 2002/02/26.
+ * tkorrovi <tkorrovi@altavista.net> on 2002/02/26. 
  * Andrew Westcott <ajwestco@users.sourceforge.net>
  * Michal Molhanec <michal@molhanec.net>
  *
@@ -179,7 +179,7 @@ _conio_gettext (int left, int top, int right, int bottom,
     SMALL_RECT r;
     CHAR_INFO* buffer;
     COORD size;
-
+    
     __fill_text_info();
     r = (SMALL_RECT) {__CONIO_LEFT + left - 1, __CONIO_TOP + top - 1,
       __CONIO_LEFT + right - 1, __CONIO_TOP + bottom - 1};
@@ -204,7 +204,7 @@ _conio_gettext (int left, int top, int right, int bottom,
 
 void
 puttext (int left, int top, int right, int bottom, struct char_info * buf)
-{
+{ 
     int i;
     SMALL_RECT r;
     CHAR_INFO* buffer;
@@ -227,12 +227,13 @@ puttext (int left, int top, int right, int bottom, struct char_info * buf)
         buffer[i].Attributes = buf[i].attr;
     }
 
-    WriteConsoleOutput (GetStdHandle (STD_OUTPUT_HANDLE),buffer, size, (COORD) {0, 0}, &r);
-    }
-    free (buffer); buffer=NULL;
+    WriteConsoleOutput (GetStdHandle (STD_OUTPUT_HANDLE),
+      buffer, size, (COORD) {0, 0}, &r);
+    free (buffer);
+}
 
-
-void gotoxy(int x, int y)
+void
+gotoxy(int x, int y)
 {
   COORD c;
 
@@ -347,7 +348,7 @@ getpass (const char * prompt, char * str)
                 }
         }
     }
-
+    
     str[1] = length;
     str[2 + length] = '\0';
     return &str[2];

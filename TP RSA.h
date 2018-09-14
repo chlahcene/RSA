@@ -581,6 +581,8 @@ void Log_in(UtilisateurRSA *user){
             if (c==13){
                 if (!(Username[0] && Password[0])) {
                     // This is input vide
+                    textbackground(WHITE);
+                    textcolor(RED);
                     AfficheErreur(x+5,y+5,"You have to fill in the input required");
                     textcolor(BLACK);
                     textbackground(WHITE);
@@ -597,6 +599,8 @@ void Log_in(UtilisateurRSA *user){
                 }
                 if (exist==0){
                     // This is username not found
+                    textbackground(WHITE);
+                    textcolor(RED);
                     AfficheErreur(x+5,y+5,"Username not found");
                     textcolor(BLACK);
                     textbackground(WHITE);
@@ -606,6 +610,8 @@ void Log_in(UtilisateurRSA *user){
                 chainTmp=hachage(Password);
                 if (strcmp(pr.MOTPASS,chainTmp)!=0){
                     // This is Password warning
+                    textbackground(WHITE);
+                    textcolor(RED);
                     AfficheErreur(x+5,y+5,"Password wrong");
                     textcolor(BLACK);
                     textbackground(WHITE);
@@ -680,19 +686,18 @@ void liberer_sup_Continu_UtilisateurRSA(UtilisateurRSA *user){
   }
 void Genere_Nbr_Premier(BigInt *Nombre,int tailleNombre,gmp_randstate_t  state){
 
-     BigInt Rd;mpz_init( Rd );
-     BigInt Mx; mpz_init( Mx );
-     mpz_ui_pow_ui( Mx, 10, tailleNombre+1 );
-     BigInt Mn;mpz_init( Mn );
-     mpz_ui_pow_ui( Mn, 10, tailleNombre );
+     BigInt rand;mpz_init( rand );
+     BigInt max; mpz_init( max );
+     mpz_ui_pow_ui( max, 10, tailleNombre+1 );
+     BigInt min;mpz_init( min );
+     mpz_ui_pow_ui( min, 10, tailleNombre );
      do{
-        mpz_urandomm( Rd, state, Mx );
-     }while( mpz_cmp( Rd, Mn) > 0 );
-     mpz_nextprime( *Nombre,Rd );
+        mpz_urandomm( rand, state, max );
+     }while( mpz_cmp( rand, min) > 0 );
+     mpz_nextprime( *Nombre,rand );
      while( !mpz_probab_prime_p(*Nombre,15)){
         mpz_nextprime( *Nombre, *Nombre );
      }
-     mpz_clear(Rd);mpz_clear(Mx);mpz_clear(Mn);
 }
 void Ajoute_cle_complet(UtilisateurRSA *user,BigInt n,BigInt e,BigInt d,const char* Nom){
     // ajoute le cle n,e,d a user

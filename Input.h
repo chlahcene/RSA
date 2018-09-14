@@ -316,8 +316,6 @@ int AreYouSure(int x,int y){
 void AfficheErreur(int x,int y,const char *Erreur){
 
     /// Affiche un erreur in th screen
-    textbackground(WHITE);
-    textcolor(RED);
     printf("%c",7);printf("%c",7);
     Page_Temporaire(x,y,40,5,Erreur);
 

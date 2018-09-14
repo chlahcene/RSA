@@ -3,9 +3,9 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
-#include "conio.h"
-#include "conio2.h"
-#include "conio.c"
+#include <conio.h>
+#include <conio2.h>
+#include <conio.c>
 #include <gmp.h>
 
 #define BigInt mpz_t
@@ -557,24 +557,20 @@ void Page_Temporaire(int x,int y,int longueur,int hauteur,const char* text){
     /// affiche page avec text si apuiyer entre elle dispareur
         struct char_info * AncienTexte;
         AncienTexte = malloc ((longueur+2)*(hauteur+4)*sizeof(struct char_info));
-        if (AncienTexte!=NULL){
-            gettext (x,y-1,x+longueur,y+hauteur+3,AncienTexte);
-            cputsxyBlanc(x,y-1," ",longueur);
-            cputsxyAreaBlanc(x,y,text,hauteur,longueur," :");
-            cputsxyBlanc(x,y+hauteur," ",longueur);
-            cputsxyBlanc(x,y+hauteur+1," ",longueur);
-            cputsxyBlanc(x,y+hauteur+2," ",longueur);
-            textcolor(BLACK);
-            textbackground(LIGHTCYAN);
-            AfficheButton("Ok",x+longueur/2-5,y+hauteur,10,3);
-            int c;
-            do{
-                c=getch();
-            }while(c!=13);
-            puttext (x,y-1,x+longueur,y+hauteur+3,AncienTexte);
-            //free(AncienTexte);
-        }else fprintf(stderr,"erreur de alocation");
-
+        gettext (x,y-1,x+longueur,y+hauteur+3,AncienTexte);
+        cputsxyBlanc(x,y-1," ",longueur);
+        cputsxyAreaBlanc(x,y,text,hauteur,longueur," :");
+        cputsxyBlanc(x,y+hauteur," ",longueur);
+        cputsxyBlanc(x,y+hauteur+1," ",longueur);
+        cputsxyBlanc(x,y+hauteur+2," ",longueur);
+        textcolor(BLACK);
+        textbackground(LIGHTCYAN);
+        AfficheButton("Ok",x+longueur/2-5,y+hauteur,10,3);
+        int c;
+        do{
+            c=getch();
+        }while(c!=13);
+        puttext (x,y-1,x+longueur,y+hauteur+3,AncienTexte);
     return 0;
 }
 void recharche_ramplacer(const char* NomFichier){
