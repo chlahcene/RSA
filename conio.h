@@ -9,45 +9,43 @@
  *
  */
 
-#ifndef	_CONIO_H_
-#define	_CONIO_H_
+#ifndef _CONIO_H_
+#define _CONIO_H_
 
 /* All the headers include this file. */
 #include <_mingw.h>
 
 #ifndef RC_INVOKED
 
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
-_CRTIMP char* __cdecl __MINGW_NOTHROW	_cgets (char*);
-_CRTIMP int __cdecl __MINGW_NOTHROW	_cprintf (const char*, ...);
-_CRTIMP int __cdecl __MINGW_NOTHROW	_cputs (const char*);
-_CRTIMP int __cdecl __MINGW_NOTHROW	_cscanf (char*, ...);
+_CRTIMP char *__cdecl __MINGW_NOTHROW _cgets(char *);
+_CRTIMP int __cdecl __MINGW_NOTHROW _cprintf(const char *, ...);
+_CRTIMP int __cdecl __MINGW_NOTHROW _cputs(const char *);
+_CRTIMP int __cdecl __MINGW_NOTHROW _cscanf(char *, ...);
 
-_CRTIMP int __cdecl __MINGW_NOTHROW	_getch (void);
-_CRTIMP int __cdecl __MINGW_NOTHROW	_getche (void);
-_CRTIMP int __cdecl __MINGW_NOTHROW	_kbhit (void);
-_CRTIMP int __cdecl __MINGW_NOTHROW	_putch (int);
-_CRTIMP int __cdecl __MINGW_NOTHROW	_ungetch (int);
+_CRTIMP int __cdecl __MINGW_NOTHROW _getch(void);
+_CRTIMP int __cdecl __MINGW_NOTHROW _getche(void);
+_CRTIMP int __cdecl __MINGW_NOTHROW _kbhit(void);
+_CRTIMP int __cdecl __MINGW_NOTHROW _putch(int);
+_CRTIMP int __cdecl __MINGW_NOTHROW _ungetch(int);
 
+#ifndef _NO_OLDNAMES
 
-#ifndef	_NO_OLDNAMES
+_CRTIMP int __cdecl __MINGW_NOTHROW getch(void);
+_CRTIMP int __cdecl __MINGW_NOTHROW getche(void);
+_CRTIMP int __cdecl __MINGW_NOTHROW kbhit(void);
+_CRTIMP int __cdecl __MINGW_NOTHROW putch(int);
+_CRTIMP int __cdecl __MINGW_NOTHROW ungetch(int);
 
-_CRTIMP int __cdecl __MINGW_NOTHROW	getch (void);
-_CRTIMP int __cdecl __MINGW_NOTHROW	getche (void);
-_CRTIMP int __cdecl __MINGW_NOTHROW	kbhit (void);
-_CRTIMP int __cdecl __MINGW_NOTHROW	putch (int);
-_CRTIMP int __cdecl __MINGW_NOTHROW	ungetch (int);
+#endif /* Not _NO_OLDNAMES */
 
-#endif	/* Not _NO_OLDNAMES */
-
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* Not RC_INVOKED */
+#endif /* Not RC_INVOKED */
 
-#endif	/* Not _CONIO_H_ */
+#endif /* Not _CONIO_H_ */
